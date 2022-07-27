@@ -13,6 +13,7 @@ export default function init() {
   passport.use(
     new BasicStrategy(async (username: string, password: string, done: any) => {
       console.log("BASIC STRATEGY")
+      // @ts-ignore
       const client = await Client.findOne({ clientId: username })
 
       if (!client) {
@@ -31,6 +32,7 @@ export default function init() {
     new ClientPasswordStrategy(
       async (clientId: string, clientSecret: string, done: any) => {
         console.log("CLIENT PASSWORD STRATEGY")
+        // @ts-ignore
         const client = await Client.findOne({ clientId: clientId })
 
         if (!client) {
@@ -49,6 +51,7 @@ export default function init() {
   passport.use(
     new BearerStrategy(async (accessToken: string, done: any) => {
       console.log("BEARER STRATEGY")
+      // @ts-ignore
       const token = await AccessToken.findOne({ token: accessToken })
 
       if (!token) {
@@ -65,10 +68,11 @@ export default function init() {
 
       const info = { scope: "*" }
       if (token.userId === token.clientId) {
+        // @ts-ignore
         const client = await Client.findOne({ clientId: token.clientId })
         return done(null, client, info)
       }
-
+      // @ts-ignore
       const user = await User.findOne({ email: token.userId })
 
       if (!user) {
