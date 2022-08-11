@@ -9,7 +9,6 @@ export default class AmbienteService {
 
   async get() {
     const response = await axios.post('https://backend-api-floats.vercel.app/api/login', { 'usr': 'inf', 'pass': '25d55ad283aa400af464c76d713c07ad' });
-    console.log(response);
     const { session_token } = response.data;
     const config = {
       headers: {

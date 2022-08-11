@@ -10,7 +10,7 @@ import { Inject, Service } from "typedi";
 export default class AmbienteController {
 
   constructor(
-    @Inject("userService") private ambienteService: AmbienteService
+    @Inject("ambienteService") private ambienteService: AmbienteService
   ) {}
 
 }
