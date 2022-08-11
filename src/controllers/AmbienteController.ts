@@ -1,17 +1,16 @@
 import passport from "passport";
-import UserService from "../services/UserService"
+import AmbienteService from "../services/AmbienteService"
 import { JsonController, UseBefore } from "routing-controllers";
 import { Inject, Service } from "typedi";
 
-@JsonController("/any")
+
+@JsonController("/ambiente")
 @UseBefore(passport.authenticate("bearer", { session: false }))
 @Service()
-export class AnyController {
+export default class AmbienteController {
 
   constructor(
-    @Inject("userService") private userService: UserService
+    @Inject("userService") private ambienteService: AmbienteService
   ) {}
-
-  
 
 }
