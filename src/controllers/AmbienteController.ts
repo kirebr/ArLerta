@@ -16,9 +16,13 @@ export default class AmbienteController {
     return await (await this.ambienteService.get()).data;
   }
 
+  @Get('/:id')
+  async getById(@Param('id') id: number) {
+    return await (await this.ambienteService.getById(id)).data;
+  }
+
   @Put('/:id')
   async put(@Param('id') id: number, @Body() limitAmbiente: any) {
-    console.log('id and ambiente:', id, limitAmbiente);
     return await (await this.ambienteService.put(id, limitAmbiente));
   }
 

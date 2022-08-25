@@ -1540,6 +1540,11 @@ node-webpmux@^3.1.0:
   resolved "https://registry.yarnpkg.com/node-webpmux/-/node-webpmux-3.1.1.tgz#a063d9c40de01809d980afdcb4b413b21c2e1a57"
   integrity sha512-vG75BAe9zKghN+Y+XsJMPdOfVyesn1MmGvd/DMxeQ6gtpB3U053yCWXO1Gl2QWXTfU1++7flTihv/yB6EEdtKQ==
 
+nodemailer@^6.7.8:
+  version "6.7.8"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.7.8.tgz#9f1af9911314960c0b889079e1754e8d9e3f740a"
+  integrity sha512-2zaTFGqZixVmTxpJRCFC+Vk5eGRd/fYtvIR+dl5u9QXLTQWGIf48x/JXvo58g9sa0bU6To04XUv554Paykum3g==
+
 npmlog@^4.0.1:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"

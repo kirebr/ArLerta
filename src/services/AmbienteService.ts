@@ -31,18 +31,34 @@ export default class AmbienteService {
     return ambiente;
   }
 
-  async getById(id: string) {
+  async getById(id: number) {
     const sessionToken = await this.getToken();
     const ambiente = await axios.get(`https://backend-api-floats.vercel.app/api/ambientes/${id}`, { headers: { sessiontoken: sessionToken }})
-    this.updateLocalAmbiente(ambiente.data.id);
+    if (ambiente.data.length > 0) { 
+      this.updateLocalAmbiente(ambiente.data[0].id);
+    }
     return ambiente;
   }
 
-  private updateLocalAmbiente(idFromAirPure: string) {
-    const values = this.limitAmbienteRepository.createQueryBuilder("LimitAmbiente")
-      .where("ambiente.idFromAirPure = :idFromAirPure", { idFromAirPure }).select(["id"]).getMany();
-    console.log(values);
+  private async updateLocalAmbiente(idFromAirPure: number) {
+    const values = await this.limitAmbienteRepository.createQueryBuilder("LimitAmbiente")
+      .where("LimitAmbiente.idFromAirPure = :idFromAirPure", { idFromAirPure }).select(["id"]).getMany();
+    if (values === undefined || values.length === 0) {
+      this.createLocalAmbiente(idFromAirPure);
+    }
     return values;
+  }
+
+  private async createLocalAmbiente(idFromAirPure: number) {
+    const limitEntity = new LimitAmbiente();
+    limitEntity.idFromAirPure = idFromAirPure;
+    limitEntity.co2 = 0;
+    limitEntity.umidade = 0;
+    limitEntity.temperatura = 0;
+    limitEntity.tvoc = 0;
+    limitEntity.dbo = 0;
+    limitEntity.lux = 0;
+    this.limitAmbienteRepository.save(limitEntity);
   }
 
   private async getToken() {
