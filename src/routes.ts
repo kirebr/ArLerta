@@ -1,16 +1,17 @@
 import { Router } from "express"
 
-import AṕpdDataSource from "./database"
+import AppDataSource from "./database"
 
 const routes = Router()
 
 const main = async () => {
   // Create database connection
-  AṕpdDataSource.initialize()
+  AppDataSource.initialize()
     .then(() => {
       console.log('Database initialized.');
     })
     .catch((error) => console.log(error))
+  // Create whatsapp integration
 }
 
 main().catch(err => {

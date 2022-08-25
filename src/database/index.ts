@@ -1,6 +1,7 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import User from "../models/User"
+import LimitAmbiente from "../models/LimitAmbiente"
 
 const AppDataSource = new DataSource({
     type: "postgres",
@@ -9,7 +10,7 @@ const AppDataSource = new DataSource({
     username: "ptjmxdyr",
     password: "SjUNpyKKFfOKsYS3iT5vDKEfAFwZygx-",
     database: "ptjmxdyr",
-    entities: [User],
+    entities: [User, LimitAmbiente],
     synchronize: true,
     logging: false,
 })
