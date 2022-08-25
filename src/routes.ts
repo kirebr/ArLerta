@@ -1,12 +1,16 @@
 import { Router } from "express"
 
-import ConnectionDatabase from "./database"
+import AṕpdDataSource from "./database"
 
 const routes = Router()
 
 const main = async () => {
   // Create database connection
-  await ConnectionDatabase.getInstance()
+  AṕpdDataSource.initialize()
+    .then(() => {
+      console.log('Database initialized.');
+    })
+    .catch((error) => console.log(error))
 }
 
 main().catch(err => {

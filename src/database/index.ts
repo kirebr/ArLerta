@@ -1,25 +1,17 @@
-import { createConnection, getConnection } from "typeorm"
+import "reflect-metadata"
+import { DataSource } from "typeorm"
+import User from "../models/User"
 
-export default class ConnectionDatabase {
-  private static instance: ConnectionDatabase
+const AppDataSource = new DataSource({
+    type: "postgres",
+    host: "kesavan.db.elephantsql.com",
+    port: 5432,
+    username: "ptjmxdyr",
+    password: "SjUNpyKKFfOKsYS3iT5vDKEfAFwZygx-",
+    database: "ptjmxdyr",
+    entities: [User],
+    synchronize: true,
+    logging: false,
+})
 
-  public static async getInstance(): Promise<ConnectionDatabase> {
-    if (!ConnectionDatabase.instance) {
-      ConnectionDatabase.instance = new ConnectionDatabase()
-      await ConnectionDatabase.instance.create()
-
-      console.log("Database connection created!")
-    }
-
-    return ConnectionDatabase.instance
-  }
-
-  async create() {
-    await createConnection()
-  }
-
-  public async close() {
-    console.log("Closing connection...")
-    await getConnection().close()
-  }
-}
+export default AppDataSource;

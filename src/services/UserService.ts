@@ -1,13 +1,17 @@
 import { Service } from 'typedi';
-import { getCustomRepository } from 'typeorm';
-
-import UserRepository from '../repositories/UserRepository';
+import User from '../models/User';
+import Repository from '../repository';
 
 @Service("userService")
 export default class UserService {
-  private userRepository: UserRepository
+
+  private userRepository: any;
 
   constructor() {
-    this.userRepository = getCustomRepository(UserRepository)
+    this.userRepository = Repository(User);
+  }
+
+  getUser(id: string) {
+    return this.userRepository.get(id);
   }
 }

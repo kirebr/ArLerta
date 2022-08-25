@@ -2,11 +2,11 @@ const fetch = require("node-fetch");
 
 const login = async (callbackSuccess, callbackError = (error) => { console.error('Error trying to login:', error) }) => {
   const body = {
-    usr: "nome",
-    pass: "password",
+    usr: "inf",
+    pass: "25d55ad283aa400af464c76d713c07ad",
   };
 
-  fetch("https://backend-api-airpure.vercel.app/api/login", {
+  fetch("https://backend-api-floats.vercel.app/api/login", {
     method: "post",
     body: JSON.stringify(body),
     headers: {
@@ -15,32 +15,30 @@ const login = async (callbackSuccess, callbackError = (error) => { console.error
     },
   })
   .then(response => {
-    response.json()
-      .then((responseLoginJson) => {
-        const jsonError = JSON.parse(responseLoginJson.error);
-        if (jsonError.success) {
-          callbackSuccess(jsonError);
-        } else {
-          callbackError(jsonError.result);
-        }
-      })
-      .catch(callbackError);
+    response.json().then(response => {
+      console.log('RESPONSE', response);
+      const tokenDeAcesso = response?.session_token;
+      if (tokenDeAcesso) {
+        callbackSuccess(tokenDeAcesso);
+      } else {
+        callbackError("Ocorreu um erro.");
+      }
+    }).catch(callbackError);
   })
   .catch(callbackError);
 }
 
-const fetchAmbiente = async ({ session_token }) => {
-  fetch("https://backend-api-airpure.vercel.app/api/ambiente/1", {
-    headers: { session_token: session_token },
+const fetchAmbiente = async (sessionToken) => {
+  fetch("https://backend-api-floats.vercel.app/api/ambientes/4", {
+    headers: { sessiontoken: sessionToken },
   }).then((response) => {
-    response
-      .json()
-      .then((json) => {
-        console.log('Fetch ambiente:', json);
-      })
-      .catch((error) => {
-        console.error('Error trying to fetch Ambiente:', error);
-      });
+    response.json().then(response => {
+      console.log('Fetch ambiente:', response);
+    }).catch((error) => {
+      console.error('Error trying to fetch Ambiente:', error);  
+    });
+  }).catch((error) => {
+    console.error('Error trying to fetch Ambiente:', error);
   });
 }
 
