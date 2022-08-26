@@ -11,7 +11,25 @@ export default class UserService {
     this.userRepository = Repository(User);
   }
 
-  getUser(id: string) {
-    return this.userRepository.get(id);
+  async get() {
+    return await this.userRepository.find();
+  }
+
+  async getById(id: number) {
+    return await this.userRepository.findOneBy({ id });
+  }
+  
+  async create(user: User) {
+    return await this.userRepository.save(user);
+  }
+
+  async update(id: number, user: User) {
+    user.id = id;
+    return await this.userRepository.save(user);
+  }
+
+  async delete(id: number) {
+    const userToRemove = await this.userRepository.findOneBy({ id });
+    return await this.userRepository.remove(userToRemove);
   }
 }
