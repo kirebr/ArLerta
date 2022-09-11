@@ -1,5 +1,7 @@
 const fetch = require("node-fetch");
 const nodeMailer = require('nodemailer');
+const LimitAmbiente = require('../models/LimitAmbiente');
+const Repository = require('../repository');
 
 const login = async (callbackSuccess, callbackError = (error) => { console.error('Error trying to login:', error) }) => {
   const body = {
@@ -45,20 +47,18 @@ const fetchAmbiente = async (sessionToken) => {
 
 const sendEmail = () => {
   let transporter = nodeMailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    host: "smtp.mailtrap.io",
+    port: 2525,
     auth: {
-        user: 'xxx@xx.com',
-        pass: 'xxxx'
+      user: "65c6d9d3c85737",
+      pass: "d4eeda4c68bf7a"
     }
   });
   let mailOptions = {
-      from: '"Krunal Lathiya" <xx@gmail.com>', // sender address
-      to: req.body.to, // list of receivers
-      subject: req.body.subject, // Subject line
-      text: req.body.body, // plain text body
-      html: '<b>NodeJS Email Tutorial</b>' // html body
+      from: '"Arlerta Mail" <arlerta@gmail.com>', // sender address
+      to: 'teste@gmail.com', // list of receivers
+      subject: 'Arlerta', // Subject line
+      text: 'Arlerta problema encontrado.', // plain text body
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -68,7 +68,14 @@ const sendEmail = () => {
   });
 }
 
+const getLimits = async () => {
+  const limitAmbienteRepository = Repository(LimitAmbiente);
+  const limits = await limitAmbienteRepository.find();
+  return limits;
+}
+
 const fetchApi = async () => {  
+  getLimits();
   login(fetchAmbiente);
 }
 

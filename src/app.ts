@@ -8,17 +8,16 @@ import routes from "./routes"
 import authInit from "./auth/auth"
 import { useContainer, useExpressServer } from "routing-controllers"
 import { Container } from "typedi"
-import jobs from "./jobs"
+import Bull from "./parallel-jobs"
 
 class App {
   public express: express.Application
 
   public constructor() {
     this.express = express()
-
     this.middlewares()
     this.routes()
-    jobs();
+    Bull();
   }
 
   private middlewares(): void {

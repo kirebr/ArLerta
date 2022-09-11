@@ -1,9 +1,10 @@
 import AmbienteService from "../services/AmbienteService"
-import { JsonController, Get, Put, Body, Param } from "routing-controllers";
+import passport from "passport"
+import { JsonController, Get, Put, Body, Param, UseBefore } from "routing-controllers";
 import { Inject, Service } from "typedi";
 
 @JsonController("/ambiente")
-// @UseBefore(passport.authenticate("bearer", { session: false }))
+@UseBefore(passport.authenticate("bearer", { session: false }))
 @Service()
 export default class AmbienteController {
 

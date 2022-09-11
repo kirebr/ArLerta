@@ -2,7 +2,7 @@ import { config as envConfig } from "dotenv"
 import Whatsapp from "./notification/WhatsappService"
 
 envConfig()
-Whatsapp.initialize()
+// Whatsapp.initialize()
 import app from "./app"
 
 const SERVER_PORT = parseInt(process?.env?.SERVER_PORT || '8080');
