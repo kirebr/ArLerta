@@ -8,7 +8,7 @@ import routes from "./routes"
 import authInit from "./auth/auth"
 import { useContainer, useExpressServer } from "routing-controllers"
 import { Container } from "typedi"
-import Bull from "./parallel-jobs"
+import jobs from "./jobs"
 
 class App {
   public express: express.Application
@@ -17,7 +17,7 @@ class App {
     this.express = express()
     this.middlewares()
     this.routes()
-    Bull();
+    jobs();
   }
 
   private middlewares(): void {

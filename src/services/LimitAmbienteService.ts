@@ -27,13 +27,13 @@ export default class LimitAmbienteService {
 
   async get() {
     const sessionToken = await this.getToken();
-    const limitambiente = await axios.get('https://backend-api-floats.vercel.app/api/limitambientes/4', { headers: { sessiontoken: sessionToken }});
+    const limitambiente = await axios.get('https://backend-api-floats.vercel.app/api/ambiente/4', { headers: { sessiontoken: sessionToken }});
     return limitambiente;
   }
 
   async getById(id: number) {
     const sessionToken = await this.getToken();
-    const limitambiente = await axios.get(`https://backend-api-floats.vercel.app/api/limitambientes/${id}`, { headers: { sessiontoken: sessionToken }})
+    const limitambiente = await axios.get(`https://backend-api-floats.vercel.app/api/ambiente/${id}`, { headers: { sessiontoken: sessionToken }})
     if (limitambiente.data.length > 0) { 
       this.updateLocalLimitAmbiente(limitambiente.data[0].id);
     }
