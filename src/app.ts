@@ -5,10 +5,12 @@ import path from "path"
 
 import cors from "cors"
 import routes from "./routes"
-import authInit from "./auth/auth"
 import { useContainer, useExpressServer } from "routing-controllers"
 import { Container } from "typedi"
 import jobs from "./jobs"
+
+import auth from "./auth/auth";
+import oauth2 from "./auth/oauth2";
 
 class App {
   public express: express.Application
@@ -33,10 +35,11 @@ class App {
     this.express.use(express.urlencoded({ extended: true }))
     this.express.use(cors(corsOptions))
     this.express.use(passport.initialize())
-    authInit()
+    this.express.post('/oauth/token', oauth2)
+    auth()
   }
 
-  private routes(): void {
+  private routes(): void {    
     this.express.use(routes)
     useContainer(Container)
     useExpressServer(this.express, {

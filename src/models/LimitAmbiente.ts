@@ -1,5 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { BaseEntity, OneToMany, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import NotificationHistory from './NotificationHistory';
 interface ILimitAmbiente {
   "id": number;
   "idFromAirPure": number;
@@ -10,7 +10,6 @@ interface ILimitAmbiente {
   "dbo": number;
   "lux": number;
 }
-
 
 export {
   ILimitAmbiente
@@ -41,4 +40,7 @@ export default class LimitAmbiente extends BaseEntity {
 
   @Column({ type: "decimal", nullable: false })
   lux!: number
+
+  @OneToMany(() => NotificationHistory, (notificationHistory) => notificationHistory.limit)
+  notificationHistory: NotificationHistory[]
 }

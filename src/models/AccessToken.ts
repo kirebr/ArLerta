@@ -16,7 +16,7 @@ export default class AccessToken extends BaseEntity {
   @Column({ name: "user_id", type: "varchar", nullable: false })
   userId!: string
 
-  @Column({ name: "client_id", type: "varchar", nullable: false })
+  @Column({ name: 'client_id', type: 'varchar', nullable: false})
   clientId!: string
 
   @Column({ type: "varchar", nullable: false, unique: true })

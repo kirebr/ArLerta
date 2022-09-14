@@ -1,42 +1,83 @@
-import passport from "passport"
-import AccessToken from "../models/AccessToken"
-import User from "../models/User"
+import passport from 'passport'
+import Repository from '../repository';
+import Client from '../models/Client'
+import AccessToken from '../models/AccessToken'
+import User from '../models/User'
 
-import { Strategy as BearerStrategy } from "passport-http-bearer"
+const BasicStrategy = require('passport-http').BasicStrategy
+const ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy
+const BearerStrategy = require('passport-http-bearer').Strategy
+
+const clientRepository = Repository(Client);
+const accessTokenRepository = Repository(AccessToken);
+const UserRepository = Repository(User);
 
 export default function init() {
-  const { TOKEN_LIFE } = process.env
+    const { TOKEN_LIFE } = process.env
 
-  passport.use(
-    new BearerStrategy(async (accessToken: string, done: any) => {
-      // @ts-ignore
-      const token = await AccessToken.findOne({ token: accessToken })
+    passport.use(
+        new BasicStrategy(async (username: string, password: string, done: any) => {
+            console.log('BASIC STRATEGY')
+            const client =  await clientRepository.findOne({ where: { clientId: username } })
+            console.log("CLient:", client);
 
-      if (!token) {
-        return done(null, false)
-      }
+            if (!client) {
+                return done(null, false)
+            }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (Math.round((Date.now() - token.createdAt) / 1000) > +TOKEN_LIFE) {
-        await token.remove()
-        return done(null, false, { message: "Token expired" })
-      }
+            // @ts-ignore
+            if (client.clientSecret !== password) {
+                return done(null, false)
+            }
 
-      const info = { scope: "*" }
-      if (token.userId === token.clientId) {
-        // @ts-ignore
-        const client = await AccessToken.findOne({ clientId: token.clientId })
-        return done(null, client, info)
-      }
-      // @ts-ignore
-      const user = await User.findOne({ email: token.userId })
+            return done(null, client)
+        })
+    )
 
-      if (!user) {
-        return done(null, false, { message: "Unknown user" })
-      }
+    passport.use(
+        new ClientPasswordStrategy(async (clientId: string, clientSecret: string, done: any) => {
+            console.log('CLIENT PASSWORD STRATEGY')
+            const client = await clientRepository.findOne({ where: { clientId: clientId }});
 
-      done(null, user, info)
-    }),
-  )
+            if (!client) {
+                return done(null, false)
+            }
+
+            // @ts-ignore
+            if (client.clientSecret !== clientSecret) {
+                return done(null, false)
+            }
+
+            return done(null, client)
+        })
+    )
+
+    passport.use(
+        new BearerStrategy(async (accessToken: string, done: any) => {
+            console.log('BEARER STRATEGY')
+            const token = await accessTokenRepository.findOne({ where: { token: accessToken }});
+
+            if (!token) {
+                return done(null, false)
+            }
+
+            // @ts-ignore
+            if (Math.round((Date.now() - token.createdAt) / 1000) > +TOKEN_LIFE) {
+                await accessTokenRepository.delete(token);
+                return done(null, false, { message: 'Token expired' });
+            }
+
+            let info = { scope: '*' }
+            // @ts-ignore
+            const { userId } = token;
+
+            const user = await UserRepository.findOne({ where: { email: userId }});
+
+            if (!user) {
+                return done(null, false, { message: 'Unknown user' })
+            }
+
+            done(null, user, info)
+        })
+    )
 }
